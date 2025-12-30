@@ -1,4 +1,3 @@
-
 import express from "express";
 import mqtt from "mqtt";
 
@@ -13,6 +12,12 @@ const TOPIC_OUT = "relay/bts/out";
 mqttClient.on("connect", () => {
   console.log("Remote server connected to MQTT");
 });
+
+app.get("/data", (req,res) => {
+    res.json({
+        tag:"Hello from Backend"
+    })
+})
 
 // BTS IN
 app.post("/bts/in", (req, res) => {
