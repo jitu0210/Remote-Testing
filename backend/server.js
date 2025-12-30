@@ -1,5 +1,6 @@
 import express from "express";
 import mqtt from "mqtt";
+import cors from "cors";
 
 const app = express();
 const port = 3000;
@@ -13,10 +14,21 @@ mqttClient.on("connect", () => {
   console.log("Remote server connected to MQTT");
 });
 
+app.use(cors({
+  origin: function (origin, callback) {
+    // allow requests with no origin (Postman, curl, Electron)
+    if (!origin) return callback(null, true);
+
+    // allow Electron apps (file:// protocol)
+    if (origin === "file://") return callback(null, true);
+
+    // otherwise block
+    return callback(new Error("CORS policy does not allow this origin"), false);
+  }
+}));
+
 app.get("/data", (req,res) => {
-    res.json({
-        tag:"Hello from Backend"
-    })
+    res.send("Hello from Backend")
 })
 
 // BTS IN
